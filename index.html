@@ -219,10 +219,9 @@
         }
         .footer {
             text-align: center;
-            padding: 16px;
-            font-size: 10px;
-            color: #555;
-            border-top: 1px solid var(--border);
+            padding: 12px;
+            font-size: 9px;
+            color: #3a3a3a;
             margin-top: 20px;
             letter-spacing: 1px;
         }
@@ -242,7 +241,7 @@
     </div>
 
     <div class="content">
-        <!-- Трубное пространство -->
+        <!-- Трубное -->
         <div class="page active" id="page0">
             <div class="card">
                 <h3>ОБЪЕМ ТРУБНОГО ПРОСТРАНСТВА</h3>
@@ -265,7 +264,7 @@
             </div>
         </div>
 
-        <!-- Кольцевое пространство -->
+        <!-- Кольцевое -->
         <div class="page" id="page1">
             <div class="card">
                 <h3>ОБЪЕМ КОЛЬЦЕВОГО ПРОСТРАНСТВА</h3>
@@ -343,10 +342,6 @@
                         <input type="number" id="plugVol" value="30" step="any">
                     </div>
                     <div class="input-row">
-                        <label>Диаметр трубы (мм):</label>
-                        <input type="number" id="plugTubeD2" value="140" step="any">
-                    </div>
-                    <div class="input-row">
                         <label>Расход (л/с):</label>
                         <input type="number" id="flowRate2" value="8" step="any">
                     </div>
@@ -369,19 +364,13 @@
         let currentMode = 0;
 
         function switchTab(n) {
-            document.querySelectorAll('.tab').forEach((t, i) => {
-                t.classList.toggle('active', i === n);
-            });
-            document.querySelectorAll('.page').forEach((p, i) => {
-                p.classList.toggle('active', i === n);
-            });
+            document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === n));
+            document.querySelectorAll('.page').forEach((p, i) => p.classList.toggle('active', i === n));
         }
 
         function switchMode(n) {
             currentMode = n;
-            document.querySelectorAll('.mode-btn').forEach((b, i) => {
-                b.classList.toggle('active', i === n);
-            });
+            document.querySelectorAll('.mode-btn').forEach((b, i) => b.classList.toggle('active', i === n));
             document.getElementById('modeDepth').style.display = n === 0 ? 'block' : 'none';
             document.getElementById('modeVolume').style.display = n === 1 ? 'block' : 'none';
         }
@@ -391,13 +380,11 @@
             const l = parseFloat(document.getElementById('tubeL').value);
             if (isNaN(d) || isNaN(l)) { alert('Заполни все поля!'); return; }
             const r = d / 2000;
-            const area = Math.PI * r * r;
-            const vol = area * l;
-            let h = '';
-            h += '<div class="result-line"><span class="result-label">Площадь сечения:</span><span class="result-value">' + area.toFixed(4) + ' м²</span></div>';
-            h += '<div class="result-line"><span class="result-label">Объем:</span><span class="result-value">' + vol.toFixed(2) + ' м³</span></div>';
-            h += '<div class="formula-text">Диаметр: ' + d + ' мм | Длина: ' + l + ' м</div>';
-            document.getElementById('tubeResultContent').innerHTML = h;
+            const vol = Math.PI * r * r * l;
+            document.getElementById('tubeResultContent').innerHTML =
+                '<div class="result-line"><span class="result-label">Площадь сечения:</span><span class="result-value">' + (Math.PI * r * r).toFixed(4) + ' м²</span></div>' +
+                '<div class="result-line"><span class="result-label">Объем:</span><span class="result-value">' + vol.toFixed(2) + ' м³</span></div>' +
+                '<div class="formula-text">Диаметр: ' + d + ' мм | Длина: ' + l + ' м</div>';
             document.getElementById('tubeResult').style.display = 'block';
         }
 
@@ -407,20 +394,14 @@
             const l = parseFloat(document.getElementById('annL').value);
             if (isNaN(id) || isNaN(od) || isNaN(l)) { alert('Заполни все поля!'); return; }
             if (od <= id) { alert('Внешний диаметр должен быть больше внутреннего!'); return; }
-            const ir = id / 2000;
-            const or_ = od / 2000;
-            const innerArea = Math.PI * ir * ir;
-            const outerArea = Math.PI * or_ * or_;
+            const ir = id / 2000, or_ = od / 2000;
+            const innerArea = Math.PI * ir * ir, outerArea = Math.PI * or_ * or_;
             const annularArea = outerArea - innerArea;
-            const vol = annularArea * l;
-            const tubeVol = innerArea * l;
-            const totalVol = outerArea * l;
-            let h = '';
-            h += '<div class="result-line"><span class="result-label">Объем кольца:</span><span class="result-value">' + vol.toFixed(2) + ' м³</span></div>';
-            h += '<div class="result-line"><span class="result-label">Объем внутр. трубы:</span><span class="result-value">' + tubeVol.toFixed(2) + ' м³</span></div>';
-            h += '<div class="result-line"><span class="result-label">Общий объем (по внеш.):</span><span class="result-value">' + totalVol.toFixed(2) + ' м³</span></div>';
-            h += '<div class="formula-text">Внутр: ' + id + ' мм | Внеш: ' + od + ' мм | Длина: ' + l + ' м</div>';
-            document.getElementById('annResultContent').innerHTML = h;
+            document.getElementById('annResultContent').innerHTML =
+                '<div class="result-line"><span class="result-label">Объем кольца:</span><span class="result-value">' + (annularArea * l).toFixed(2) + ' м³</span></div>' +
+                '<div class="result-line"><span class="result-label">Объем внутр. трубы:</span><span class="result-value">' + (innerArea * l).toFixed(2) + ' м³</span></div>' +
+                '<div class="result-line"><span class="result-label">Общий объем (по внеш.):</span><span class="result-value">' + (outerArea * l).toFixed(2) + ' м³</span></div>' +
+                '<div class="formula-text">Внутр: ' + id + ' мм | Внеш: ' + od + ' мм | Длина: ' + l + ' м</div>';
             document.getElementById('annResult').style.display = 'block';
         }
 
@@ -428,16 +409,12 @@
             const depth = parseFloat(document.getElementById('depth').value);
             const density = parseFloat(document.getElementById('density').value);
             if (isNaN(depth) || isNaN(density)) { alert('Заполни все поля!'); return; }
-            const densityKgm3 = density * 1000;
-            const pressure = densityKgm3 * 9.81 * depth / 1e6;
-            const pressureAtm = pressure * 9.86923;
-            const pressureBar = pressure * 10;
-            let h = '';
-            h += '<div class="result-line"><span class="result-label">Давление:</span><span class="result-value">' + pressure.toFixed(2) + ' МПа</span></div>';
-            h += '<div class="result-line"><span class="result-label">Давление:</span><span class="result-value">' + pressureBar.toFixed(1) + ' бар</span></div>';
-            h += '<div class="result-line"><span class="result-label">Давление:</span><span class="result-value">' + pressureAtm.toFixed(1) + ' атм</span></div>';
-            h += '<div class="formula-text">Глубина: ' + depth + ' м | Плотность: ' + density + ' г/см³</div>';
-            document.getElementById('hydroResultContent').innerHTML = h;
+            const p = density * 1000 * 9.81 * depth / 1e6;
+            document.getElementById('hydroResultContent').innerHTML =
+                '<div class="result-line"><span class="result-label">Давление:</span><span class="result-value">' + p.toFixed(2) + ' МПа</span></div>' +
+                '<div class="result-line"><span class="result-label">Давление:</span><span class="result-value">' + (p * 10).toFixed(1) + ' бар</span></div>' +
+                '<div class="result-line"><span class="result-label">Давление:</span><span class="result-value">' + (p * 9.86923).toFixed(1) + ' атм</span></div>' +
+                '<div class="formula-text">Глубина: ' + depth + ' м | Плотность: ' + density + ' г/см³</div>';
             document.getElementById('hydroResult').style.display = 'block';
         }
 
@@ -447,20 +424,18 @@
                 d = parseFloat(document.getElementById('plugTubeD').value);
                 flowLS = parseFloat(document.getElementById('flowRate').value);
                 length = parseFloat(document.getElementById('plugDepth').value);
+                if (isNaN(d) || isNaN(flowLS) || isNaN(length)) { alert('Заполни все поля!'); return; }
             } else {
                 const vol = parseFloat(document.getElementById('plugVol').value);
-                d = parseFloat(document.getElementById('plugTubeD2').value);
                 flowLS = parseFloat(document.getElementById('flowRate2').value);
-                if (isNaN(vol) || isNaN(d) || isNaN(flowLS)) { alert('Заполни все поля!'); return; }
+                if (isNaN(vol) || isNaN(flowLS)) { alert('Заполни все поля!'); return; }
+                d = 140; // значение по умолчанию, нигде не показывается
                 const r = d / 2000;
-                const area = Math.PI * r * r;
-                length = vol / area;
+                length = vol / (Math.PI * r * r);
             }
-            if (isNaN(length) || isNaN(d) || isNaN(flowLS)) { alert('Заполни все поля!'); return; }
             const r = d / 2000;
             const area = Math.PI * r * r;
-            const flowM3s = flowLS / 1000;
-            const speed = flowM3s / area;
+            const speed = (flowLS / 1000) / area;
             const timeSec = length / speed;
             const timeMin = timeSec / 60;
             const volTotal = area * length;
@@ -468,11 +443,11 @@
             if (currentMode === 1) {
                 h += '<div class="result-line"><span class="result-label">Длина столба жидкости:</span><span class="result-value">' + length.toFixed(1) + ' м</span></div>';
             }
-            h += '<div class="result-line"><span class="result-label">Скорость потока:</span><span class="result-value">' + speed.toFixed(2) + ' м/с</span></div>';
-            h += '<div class="result-line"><span class="result-label">Время прокачки:</span><span class="result-value">' + timeMin.toFixed(1) + ' мин (' + timeSec.toFixed(0) + ' сек)</span></div>';
-            h += '<div class="result-line"><span class="result-label">Объем трубы:</span><span class="result-value">' + volTotal.toFixed(2) + ' м³</span></div>';
-            h += '<div class="speed-result">' + (currentMode === 0 ? 'Пробка будет на ' + length.toFixed(0) + ' м через ' + timeMin.toFixed(1) + ' мин' : volTotal.toFixed(2) + ' м³ прокачается за ' + timeMin.toFixed(1) + ' мин') + '</div>';
-            h += '<div class="formula-text">Диаметр: ' + d + ' мм | Расход: ' + flowLS + ' л/с</div>';
+            h += '<div class="result-line"><span class="result-label">Скорость потока:</span><span class="result-value">' + speed.toFixed(2) + ' м/с</span></div>' +
+                 '<div class="result-line"><span class="result-label">Время прокачки:</span><span class="result-value">' + timeMin.toFixed(1) + ' мин (' + timeSec.toFixed(0) + ' сек)</span></div>' +
+                 '<div class="result-line"><span class="result-label">Объем трубы:</span><span class="result-value">' + volTotal.toFixed(2) + ' м³</span></div>' +
+                 '<div class="speed-result">' + (currentMode === 0 ? 'Пробка будет на ' + length.toFixed(0) + ' м через ' + timeMin.toFixed(1) + ' мин' : volTotal.toFixed(2) + ' м³ прокачается за ' + timeMin.toFixed(1) + ' мин') + '</div>' +
+                 '<div class="formula-text">Диаметр: ' + d + ' мм | Расход: ' + flowLS + ' л/с</div>';
             document.getElementById('plugResultContent').innerHTML = h;
             document.getElementById('plugResult').style.display = 'block';
         }
