@@ -3,6 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="SPmate">
+    
+    <!-- Иконка: черный фон, сине-голубые объемные буквы SP, внизу MATE -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' style='stop-color:%234da6ff'/><stop offset='100%25' style='stop-color:%232f5496'/></linearGradient><filter id='shadow'><feDropShadow dx='0' dy='4' stdDeviation='6' flood-color='%23000' flood-opacity='0.8'/></filter></defs><rect width='180' height='180' rx='40' fill='%23000'/><text x='90' y='95' font-size='90' font-weight='900' fill='url(%23g)' text-anchor='middle' filter='url(%23shadow)' font-family='Arial,sans-serif' letter-spacing='-2'>SP</text><text x='90' y='150' font-size='40' font-weight='700' fill='%234da6ff' text-anchor='middle' font-family='Arial,sans-serif' letter-spacing='6'>MATE</text></svg>">
+    
     <title>SP Mate</title>
     <style>
         :root {
@@ -192,14 +199,6 @@
             font-weight: 600;
             color: var(--accent);
         }
-        .footer {
-            text-align: center;
-            padding: 12px;
-            font-size: 9px;
-            color: #555;
-            border-top: 1px solid var(--border);
-            margin-top: 10px;
-        }
         .mode-switch {
             display: flex;
             gap: 6px;
@@ -358,8 +357,6 @@
             </div>
         </div>
     </div>
-
-    <div class="footer">production by Samkov Pavel</div>
 
     <script>
         let currentMode = 0;
