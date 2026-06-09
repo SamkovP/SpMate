@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>SP Mate | Самков</title>
+    <style>
+        :root {
+            --bg: #000;
+            --card: #1c1c1e;
+            --border: #2c2c2e;
+            --accent: #4da6ff;
+            --accent-dark: #2f5496;
+            --text: #fff;
+            --sub: #8e8e93;
+            --green: #34c759;
+            --red: #ff3b30;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            background: var(--bg);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 30px;
+        }
+
+        /* Шапка */
+        .header {
+            padding: 16px 20px 12px;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 3px;
+        }
+        .header .version {
+            font-size: 12px;
+            color: var(--sub);
+        }
+
+        /* Вкладки */
+        .tabs {
+            display: flex;
+            padding: 10px 12px;
+            gap: 6px;
+            background: var(--bg);
+            position: sticky;
+            top: 0;
+            z-index: 9;
+        }
+        .tab {
+            flex: 1;
+            padding: 10px 6px;
+            border-radius: 10px;
+            background: var(--card);
+            color: var(--sub);
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+        .tab.active {
+            background: var(--accent-dark);
+            color: #fff;
+            border-color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* Контент */
+        .content {
+            padding: 14px;
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+        .card {
+            background: var(--card);
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+        }
+        .card h3 {
+            font-size: 14px;
+            color: var(--accent);
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .input-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 8px;
+        }
+        .input-row label {
+            flex: 1;
+            font-size: 12px;
+            color: var(--sub);
+        }
+        .input-row input {
+            width: 80px;
+            padding: 8px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 14px;
+            text-align: center;
+        }
+        .btn-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            margin-bottom: 12px;
+        }
+        .btn {
+            flex: 1;
+            padding: 13px;
+            border-radius: 10px;
+            border: none;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            color: white;
+        }
+        .btn-calc {
+            background: var(--accent-dark);
+            flex: 2;
+        }
+        .btn-clear {
+            background: #555;
+        }
+        .result-box {
+            background: var(--card);
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            display: none;
+        }
+        .result-box h3 {
+            font-size: 14px;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+        .result-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border);
+        }
+        .result-label {
+            color: var(--sub);
+        }
+        .result-value {
+            font-weight: 600;
+            color: var(--accent);
+        }
+        .formula-text {
+            font-size: 10px;
+            color: var(--sub);
+            margin-top: 8px;
+            font-style: italic;
+        }
+        .speed-result {
+            background: rgba(77, 166, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 8px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        /* Подвал */
+        .footer {
+            text-align: center;
+            padding: 12px;
+            font-size: 9px;
+            color: #555;
+            border-top: 1px solid var(--border);
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SP MATE</h1>
+        <span class="version">v1.0</span>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab(0)">Труба</div>
+        <div class="tab" onclick="switchTab(1)">Кольцо</div>
+        <div class="tab" onclick="switchTab(2)">Гидро-статика</div>
+        <div class="tab" onclick="switchTab(3)">Пробка</div>
+    </div>
+
+    <div class="content">
+        <!-- Труба -->
+        <div class="page active" id="page0">
+            <div class="card">
+                <h3>ОБЪЕМ ТРУБНОГО ПРОСТРАНСТВА</h3>
+                <div class="input-row">
+                    <label>Диаметр трубы (мм):</label>
+                    <input type="number" id="tubeD" value="140" step="any">
+                </div>
+                <div class="input-row">
+                    <label>Длина (м):</label>
+                    <input type="number" id="tubeL" value="3000" step="any">
+                </div>
+                <div class="btn-row">
+                    <button class="btn btn-calc" onclick="calcTube()">РАССЧИТАТЬ</button>
+                    <button class="btn btn-clear" onclick="clearResult('tubeResult')">ОЧИСТИТЬ</button>
+                </div>
+                <div class="result-box" id="tubeResult">
+                    <h3>РЕЗУЛЬТАТ</h3>
+                    <div id="tubeResultContent"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Кольцо -->
+        <div class="page" id="page1">
+            <div class="card">
+                <h3>ОБЪЕМ КОЛЬЦЕВОГО ПРОСТРАНСТВА</h3>
+                <div class="input-row">
+                    <label>Внутренняя труба (мм):</label>
+                    <input type="number" id="innerD" value="140" step="any">
+                </div>
+                <div class="input-row">
+                    <label>Внешняя труба (мм):</label>
+                    <input type="number" id="outerD" value="160" step="any">
+                </div>
+                <div class="input-row">
+                    <label>Длина (м):</label>
+                    <input type="number" id="annL" value="3000" step="any">
+                </div>
+                <div class="btn-row">
+                    <button class="btn btn-calc" onclick="calcAnnular()">РАССЧИТАТЬ</button>
+                    <button class="btn btn-clear" onclick="clearResult('annResult')">ОЧИСТИТЬ</button>
+                </div>
+                <div class="result-box" id="annResult">
+                    <h3>РЕЗУЛЬТАТ</h3>
+                    <div id="annResultContent"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Гидростатика -->
+        <div class="page" id="page2">
+            <div class="card">
+                <h3>ГИДРОСТАТИЧЕСКОЕ ДАВЛЕНИЕ</h3>
+                <div class="input-row">
+                    <label>Глубина (м):</label>
+                    <input type="number" id="depth" value="3000" step="any">
+                </div>
+                <div class="input-row">
+                    <label>Плотность жидкости (кг/м³):</label>
+                    <input type="number" id="density" value="1000" step="any">
+                </div>
+                <div class="btn-row">
+                    <button class="btn btn-calc" onclick="calcHydro()">РАССЧИТАТЬ</button>
+                    <button class="btn btn-clear" onclick="clearResult('hydroResult')">ОЧИСТИТЬ</button>
+                </div>
+                <div class="result-box" id="hydroResult">
+                    <h3>РЕЗУЛЬТАТ</h3>
+                    <div id="hydroResultContent"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Пробка -->
+        <div class="page" id="page3">
+            <div class="card">
+                <h3>СКОРОСТЬ ПОТОКА И ПРОБКА</h3>
+                <div class="input-row">
+                    <label>Глубина (м):</label>
+                    <input type="number" id="plugDepth" value="3000" step="any">
+                </div>
+                <div class="input-row">
+                    <label>Диаметр трубы (мм):</label>
+                    <input type="number" id="plugTubeD" value="140" step="any">
+                </div>
+                <div class="input-row">
+                    <label>Расход насоса (л/с):</label>
+                    <input type="number" id="flowRate" value="8" step="any">
+                </div>
+                <div class="btn-row">
+                    <button class="btn btn-calc" onclick="calcPlug()">РАССЧИТАТЬ</button>
+                    <button class="btn btn-clear" onclick="clearResult('plugResult')">ОЧИСТИТЬ</button>
+                </div>
+                <div class="result-box" id="plugResult">
+                    <h3>РЕЗУЛЬТАТ</h3>
+                    <div id="plugResultContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">production by Samkov Pavel</div>
+
+    <script>
+        function switchTab(n) {
+            document.querySelectorAll('.tab').forEach((t, i) => {
+                t.classList.toggle('active', i === n);
+            });
+            document.querySelectorAll('.page').forEach((p, i) => {
+                p.classList.toggle('active', i === n);
+            });
+        }
+
+        function calcTube() {
+            const d = parseFloat(document.getElementById('tubeD').value);
+            const l = parseFloat(document.getElementById('tubeL').value);
+            if (isNaN(d) || isNaN(l)) { alert('Заполни все поля!'); return; }
+            const r = d / 2000;
+            const area = Math.PI * r * r;
+            const vol = area * l;
+            const liters = vol * 1000;
+            let h = '';
+            h += '<div class="result-line"><span class="result-label">Площадь сечения:</span><span class="result-value">' + area.toFixed(4) + ' м²</span></div>';
+            h += '<div class="result-line"><span class="result-label">Объем трубы:</span><span class="result-value">' + vol.toFixed(2) + ' м³ (' + liters.toFixed(0) + ' л)</span></div>';
+            h += '<div class="formula-text">Диаметр: ' + d + ' мм | Длина: ' + l + ' м</div>';
+            document.getElementById('tubeResultContent').innerHTML = h;
+            document.getElementById('tubeResult').style.display = 'block';
+        }
+
+        function calcAnnular() {
+            const id = parseFloat(document.getElementById('innerD').value);
+            const od = parseFloat(document.getElementById('outerD').value);
+            const l = parseFloat(document.getElementById('annL').value);
+            if (isNaN(id) || isNaN(od) || isNaN(l)) { alert('Заполни все поля!'); return; }
+            if (od <= id) { alert('Внешний диаметр должен быть больше внутреннего!'); return; }
+            const ir = id / 2000;
+            const or_ = od / 2000;
+            const innerArea = Math.PI * ir * ir;
+            const outerArea = Math.PI * or_ * or_;
+            const annularArea = outerArea - innerArea;
+            const vol = annularArea * l;
+            const liters = vol * 1000;
+            const tubeVol = innerArea * l;
+            const tubeLiters = tubeVol * 1000;
+            const totalVol = outerArea * l;
+            const totalLiters = totalVol * 1000;
+            let h = '';
+            h += '<div class="result-line"><span class="result-label">Объем кольца:</span><span class="result-value">' + vol.toFixed(2) + ' м³ (' + liters.toFixed(0) + ' л)</span></div>';
+            h += '<div class="result-line"><span class="result-label">Объем во внутр. трубе:</span><span class="result-value">' + tubeVol.toFixed(2) + ' м³ (' + tubeLiters.toFixed(0) + ' л)</span></div>';
+            h += '<div class="result-line"><span class="result-label">Общий объем (по внеш.):</span><span class="result-value">' + totalVol.toFixed(2) + ' м³ (' + totalLiters.toFixed(0) + ' л)</span></div>';
+            h += '<div class="formula-text">Внутр: ' + id + ' мм | Внеш: ' + od + ' мм | Длина: ' + l + ' м</div>';
+            document.getElementById('annResultContent').innerHTML = h;
+            document.getElementById('annResult').style.display = 'block';
+        }
+
+        function calcHydro() {
+            const depth = parseFloat(document.getElementById('depth').value);
+            const density = parseFloat(document.getElementById('density').value);
+            if (isNaN(depth) || isNaN(density)) { alert('Заполни все поля!'); return; }
+            const pressure = density * 9.81 * depth / 1e6;
+            const pressureAtm = pressure * 9.86923;
+            const pressureBar = pressure * 10;
+            let h = '';
+            h += '<div class="result-line"><span class="result-label">Давление:</span><span class="result-value">' + pressure.toFixed(2) + ' МПа</span></div>';
+            h += '<div class="result-line"><span class="result-label">Давление:</span><span class="result-value">' + pressureBar.toFixed(1) + ' бар</span></div>';
+            h += '<div class="result-line"><span class="result-label">Давление:</span><span class="result-value">' + pressureAtm.toFixed(1) + ' атм</span></div>';
+            h += '<div class="formula-text">Глубина: ' + depth + ' м | Плотность: ' + density + ' кг/м³</div>';
+            document.getElementById('hydroResultContent').innerHTML = h;
+            document.getElementById('hydroResult').style.display = 'block';
+        }
+
+        function calcPlug() {
+            const depth = parseFloat(document.getElementById('plugDepth').value);
+            const d = parseFloat(document.getElementById('plugTubeD').value);
+            const flowLS = parseFloat(document.getElementById('flowRate').value);
+            if (isNaN(depth) || isNaN(d) || isNaN(flowLS)) { alert('Заполни все поля!'); return; }
+            const r = d / 2000;
+            const area = Math.PI * r * r;
+            const flowM3s = flowLS / 1000;
+            const speed = flowM3s / area;
+            const timeSec = depth / speed;
+            const timeMin = timeSec / 60;
+            const vol = area * depth;
+            const liters = vol * 1000;
+            let h = '';
+            h += '<div class="result-line"><span class="result-label">Скорость потока:</span><span class="result-value">' + speed.toFixed(2) + ' м/с</span></div>';
+            h += '<div class="result-line"><span class="result-label">Время падения пробки:</span><span class="result-value">' + timeMin.toFixed(1) + ' мин (' + timeSec.toFixed(0) + ' сек)</span></div>';
+            h += '<div class="result-line"><span class="result-label">Объем трубы:</span><span class="result-value">' + vol.toFixed(2) + ' м³ (' + liters.toFixed(0) + ' л)</span></div>';
+            h += '<div class="speed-result">Пробка будет на глубине ' + depth + ' м через ' + timeMin.toFixed(1) + ' мин</div>';
+            h += '<div class="formula-text">Диаметр: ' + d + ' мм | Расход: ' + flowLS + ' л/с | Глубина: ' + depth + ' м</div>';
+            document.getElementById('plugResultContent').innerHTML = h;
+            document.getElementById('plugResult').style.display = 'block';
+        }
+
+        function clearResult(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+    </script>
+</body>
+</html>
