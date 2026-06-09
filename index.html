@@ -429,7 +429,7 @@
                 const vol = parseFloat(document.getElementById('plugVol').value);
                 flowLS = parseFloat(document.getElementById('flowRate2').value);
                 if (isNaN(vol) || isNaN(flowLS)) { alert('Заполни все поля!'); return; }
-                d = 140; // значение по умолчанию, нигде не показывается
+                d = 140;
                 const r = d / 2000;
                 length = vol / (Math.PI * r * r);
             }
@@ -438,16 +438,14 @@
             const speed = (flowLS / 1000) / area;
             const timeSec = length / speed;
             const timeMin = timeSec / 60;
+            const timeHours = timeMin / 60;
             const volTotal = area * length;
             let h = '';
-            if (currentMode === 1) {
-                h += '<div class="result-line"><span class="result-label">Длина столба жидкости:</span><span class="result-value">' + length.toFixed(1) + ' м</span></div>';
-            }
             h += '<div class="result-line"><span class="result-label">Скорость потока:</span><span class="result-value">' + speed.toFixed(2) + ' м/с</span></div>' +
-                 '<div class="result-line"><span class="result-label">Время прокачки:</span><span class="result-value">' + timeMin.toFixed(1) + ' мин (' + timeSec.toFixed(0) + ' сек)</span></div>' +
+                 '<div class="result-line"><span class="result-label">Время прокачки:</span><span class="result-value">' + timeMin.toFixed(1) + ' мин (' + timeHours.toFixed(2) + ' ч)</span></div>' +
                  '<div class="result-line"><span class="result-label">Объем трубы:</span><span class="result-value">' + volTotal.toFixed(2) + ' м³</span></div>' +
-                 '<div class="speed-result">' + (currentMode === 0 ? 'Пробка будет на ' + length.toFixed(0) + ' м через ' + timeMin.toFixed(1) + ' мин' : volTotal.toFixed(2) + ' м³ прокачается за ' + timeMin.toFixed(1) + ' мин') + '</div>' +
-                 '<div class="formula-text">Диаметр: ' + d + ' мм | Расход: ' + flowLS + ' л/с</div>';
+                 '<div class="speed-result">' + (currentMode === 0 ? 'Пробка на ' + length.toFixed(0) + ' м через ' + timeMin.toFixed(1) + ' мин (' + timeHours.toFixed(2) + ' ч)' : volTotal.toFixed(2) + ' м³ за ' + timeMin.toFixed(1) + ' мин (' + timeHours.toFixed(2) + ' ч)') + '</div>' +
+                 '<div class="formula-text">Расход: ' + flowLS + ' л/с</div>';
             document.getElementById('plugResultContent').innerHTML = h;
             document.getElementById('plugResult').style.display = 'block';
         }
