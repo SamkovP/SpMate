@@ -412,7 +412,6 @@
             const p = density * 1000 * 9.81 * depth / 1e6;
             document.getElementById('hydroResultContent').innerHTML =
                 '<div class="result-line"><span class="result-label">Давление:</span><span class="result-value">' + p.toFixed(2) + ' МПа</span></div>' +
-                '<div class="result-line"><span class="result-label">Давление:</span><span class="result-value">' + (p * 10).toFixed(1) + ' бар</span></div>' +
                 '<div class="result-line"><span class="result-label">Давление:</span><span class="result-value">' + (p * 9.86923).toFixed(1) + ' атм</span></div>' +
                 '<div class="formula-text">Глубина: ' + depth + ' м | Плотность: ' + density + ' г/см³</div>';
             document.getElementById('hydroResult').style.display = 'block';
@@ -437,14 +436,15 @@
             const area = Math.PI * r * r;
             const speed = (flowLS / 1000) / area;
             const timeSec = length / speed;
-            const timeMin = timeSec / 60;
-            const timeHours = timeMin / 60;
+            const totalMinutes = timeSec / 60;
+            const hh = Math.floor(totalMinutes / 60);
+            const mm = Math.round(totalMinutes % 60);
             const volTotal = area * length;
             let h = '';
             h += '<div class="result-line"><span class="result-label">Скорость потока:</span><span class="result-value">' + speed.toFixed(2) + ' м/с</span></div>' +
-                 '<div class="result-line"><span class="result-label">Время прокачки:</span><span class="result-value">' + timeMin.toFixed(1) + ' мин (' + timeHours.toFixed(2) + ' ч)</span></div>' +
+                 '<div class="result-line"><span class="result-label">Время прокачки:</span><span class="result-value">' + hh + ' ч ' + mm + ' мин</span></div>' +
                  '<div class="result-line"><span class="result-label">Объем трубы:</span><span class="result-value">' + volTotal.toFixed(2) + ' м³</span></div>' +
-                 '<div class="speed-result">' + (currentMode === 0 ? 'Пробка на ' + length.toFixed(0) + ' м через ' + timeMin.toFixed(1) + ' мин (' + timeHours.toFixed(2) + ' ч)' : volTotal.toFixed(2) + ' м³ за ' + timeMin.toFixed(1) + ' мин (' + timeHours.toFixed(2) + ' ч)') + '</div>' +
+                 '<div class="speed-result">' + (currentMode === 0 ? 'Пробка на ' + length.toFixed(0) + ' м через ' + hh + ' ч ' + mm + ' мин' : volTotal.toFixed(2) + ' м³ за ' + hh + ' ч ' + mm + ' мин') + '</div>' +
                  '<div class="formula-text">Расход: ' + flowLS + ' л/с</div>';
             document.getElementById('plugResultContent').innerHTML = h;
             document.getElementById('plugResult').style.display = 'block';
