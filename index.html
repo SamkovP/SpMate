@@ -241,7 +241,6 @@
     </div>
 
     <div class="content">
-        <!-- Трубное -->
         <div class="page active" id="page0">
             <div class="card">
                 <h3>ОБЪЕМ ТРУБНОГО ПРОСТРАНСТВА</h3>
@@ -264,7 +263,6 @@
             </div>
         </div>
 
-        <!-- Кольцевое -->
         <div class="page" id="page1">
             <div class="card">
                 <h3>ОБЪЕМ КОЛЬЦЕВОГО ПРОСТРАНСТВА</h3>
@@ -291,7 +289,6 @@
             </div>
         </div>
 
-        <!-- Гидростатика -->
         <div class="page" id="page2">
             <div class="card">
                 <h3>ГИДРОСТАТИЧЕСКОЕ ДАВЛЕНИЕ</h3>
@@ -314,7 +311,6 @@
             </div>
         </div>
 
-        <!-- Прокачка -->
         <div class="page" id="page3">
             <div class="card">
                 <h3>ПРОКАЧКА</h3>
@@ -452,6 +448,17 @@
 
         function clearResult(id) {
             document.getElementById(id).style.display = 'none';
+        }
+
+        // Регистрация Service Worker для офлайн-режима
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                    console.log('ServiceWorker зарегистрирован');
+                }).catch(function(err) {
+                    console.log('ServiceWorker ошибка: ', err);
+                });
+            });
         }
     </script>
 </body>
