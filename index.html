@@ -29,10 +29,6 @@
             color: var(--text);
             min-height: 100vh;
             padding-bottom: 30px;
-            opacity: 0;
-            transition: opacity 0.6s ease;
-        }
-        body.loaded {
             opacity: 1;
         }
 
@@ -49,58 +45,91 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
         }
         #splash.hide {
             opacity: 0;
             visibility: hidden;
         }
-        #splash .logo {
-            font-size: 48px;
-            font-weight: 900;
-            color: #4da6ff;
-            letter-spacing: 4px;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-        #splash .sub {
-            font-size: 14px;
-            color: #8e8e93;
-            margin-top: 8px;
-            letter-spacing: 2px;
-        }
-        #splash .loader {
-            width: 60px;
-            height: 2px;
-            background: #2c2c2e;
-            margin-top: 24px;
-            border-radius: 1px;
-            overflow: hidden;
-        }
-        #splash .loader-bar {
-            height: 100%;
-            width: 0%;
-            background: #4da6ff;
-            animation: load 1.8s ease-in-out forwards;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 0.4; transform: scale(0.95); }
-            50% { opacity: 1; transform: scale(1.05); }
-        }
-        @keyframes load {
-            0% { width: 0%; }
-            100% { width: 100%; }
-        }
-
-        /* Иллюстрации */
-        .illustration {
-            text-align: center;
-            margin: 8px 0 14px;
-        }
-        .illustration svg {
-            width: 120px;
+        .logo-container {
+            position: relative;
+            width: 100px;
             height: 100px;
         }
+        .logo-ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 100px;
+            border: 2px solid transparent;
+            border-top-color: #4da6ff;
+            border-right-color: #4da6ff;
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+        }
+        .logo-ring:nth-child(2) {
+            width: 80px;
+            height: 80px;
+            top: 10px;
+            left: 10px;
+            border-top-color: #2f5496;
+            border-left-color: #2f5496;
+            border-right-color: transparent;
+            animation-direction: reverse;
+            animation-duration: 2s;
+        }
+        .logo-ring:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 20px;
+            left: 20px;
+            border-bottom-color: #4da6ff;
+            border-left-color: #4da6ff;
+            border-top-color: transparent;
+            animation-duration: 1.2s;
+        }
+        .logo-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 22px;
+            font-weight: 900;
+            color: #4da6ff;
+            letter-spacing: 2px;
+            animation: glow 1.5s ease-in-out infinite;
+        }
+        .splash-sub {
+            font-size: 11px;
+            color: #4da6ff;
+            margin-top: 30px;
+            letter-spacing: 4px;
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+            animation-delay: 1s;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px rgba(77,166,255,0.3); }
+            50% { text-shadow: 0 0 30px rgba(77,166,255,0.8), 0 0 60px rgba(77,166,255,0.3); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 0.7; transform: translateY(0); }
+        }
 
+        .illustration {
+            text-align: center;
+            margin: 4px 0 10px;
+        }
+        .illustration svg {
+            width: 100px;
+            height: 85px;
+        }
         .header {
             padding: 16px 20px 12px;
             border-bottom: 1px solid var(--border);
@@ -168,7 +197,7 @@
         .card h3 {
             font-size: 14px;
             color: var(--accent);
-            margin-bottom: 6px;
+            margin-bottom: 2px;
             text-align: center;
             font-weight: 600;
         }
@@ -311,14 +340,18 @@
 
     <!-- Splash Screen -->
     <div id="splash">
-        <div class="logo">SP MATE</div>
-        <div class="sub">ИНЖЕНЕРНЫЕ РАСЧЁТЫ</div>
-        <div class="loader"><div class="loader-bar"></div></div>
+        <div class="logo-container">
+            <div class="logo-ring"></div>
+            <div class="logo-ring"></div>
+            <div class="logo-ring"></div>
+            <div class="logo-text">SP</div>
+        </div>
+        <div class="splash-sub">ИНЖЕНЕРНЫЕ РАСЧЁТЫ</div>
     </div>
 
     <div class="header">
         <h1>SP MATE</h1>
-        <span class="version">v2.2</span>
+        <span class="version">v2.3</span>
     </div>
 
     <div class="tabs">
@@ -334,17 +367,12 @@
             <div class="card">
                 <h3>ОБЪЕМ ТРУБНОГО ПРОСТРАНСТВА</h3>
                 <div class="illustration">
-                    <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="30" y="10" width="60" height="80" rx="6" stroke="#4da6ff" stroke-width="2" fill="none"/>
-                        <rect x="38" y="10" width="44" height="80" rx="4" fill="#4da6ff" opacity="0.1"/>
-                        <line x1="30" y1="20" x2="20" y2="10" stroke="#8e8e93" stroke-width="1"/>
-                        <text x="20" y="8" fill="#8e8e93" font-size="8">D</text>
-                        <line x1="90" y1="90" x2="105" y2="90" stroke="#8e8e93" stroke-width="1"/>
-                        <line x1="105" y1="70" x2="105" y2="90" stroke="#8e8e93" stroke-width="1"/>
-                        <line x1="98" y1="70" x2="105" y2="70" stroke="#8e8e93" stroke-width="1"/>
-                        <line x1="98" y1="90" x2="105" y2="90" stroke="#8e8e93" stroke-width="1"/>
-                        <text x="105" y="82" fill="#8e8e93" font-size="7">L</text>
-                        <text x="45" y="55" fill="#4da6ff" font-size="10" font-weight="700">V</text>
+                    <svg viewBox="0 0 100 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="25" y="8" width="50" height="68" rx="6" stroke="#4da6ff" stroke-width="2" fill="none"/>
+                        <rect x="32" y="8" width="36" height="68" rx="4" fill="#4da6ff" opacity="0.08"/>
+                        <text x="50" y="48" fill="#4da6ff" font-size="11" font-weight="700" text-anchor="middle">V</text>
+                        <text x="18" y="14" fill="#8e8e93" font-size="8">D</text>
+                        <text x="78" y="48" fill="#8e8e93" font-size="8">L</text>
                     </svg>
                 </div>
                 <div class="input-row">
@@ -371,12 +399,11 @@
             <div class="card">
                 <h3>ОБЪЕМ КОЛЬЦЕВОГО ПРОСТРАНСТВА</h3>
                 <div class="illustration">
-                    <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="25" y="10" width="70" height="80" rx="8" stroke="#4da6ff" stroke-width="2" fill="none"/>
-                        <rect x="38" y="10" width="44" height="80" rx="6" stroke="#2f5496" stroke-width="1.5" fill="none" stroke-dasharray="4 2"/>
-                        <rect x="42" y="10" width="36" height="80" rx="4" fill="#4da6ff" opacity="0.08"/>
-                        <text x="50" y="55" fill="#8e8e93" font-size="8">Внутр</text>
-                        <text x="78" y="30" fill="#4da6ff" font-size="8">Кольцо</text>
+                    <svg viewBox="0 0 100 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="20" y="8" width="60" height="68" rx="8" stroke="#4da6ff" stroke-width="2" fill="none"/>
+                        <rect x="32" y="8" width="36" height="68" rx="6" stroke="#2f5496" stroke-width="1.5" fill="none" stroke-dasharray="4 2"/>
+                        <rect x="36" y="8" width="28" height="68" rx="4" fill="#4da6ff" opacity="0.06"/>
+                        <text x="50" y="48" fill="#4da6ff" font-size="9" font-weight="600" text-anchor="middle">Кольцо</text>
                     </svg>
                 </div>
                 <div class="input-row">
@@ -407,15 +434,11 @@
             <div class="card">
                 <h3>ГИДРОСТАТИЧЕСКОЕ ДАВЛЕНИЕ</h3>
                 <div class="illustration">
-                    <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="45" y="5" width="30" height="85" rx="4" stroke="#4da6ff" stroke-width="2" fill="none"/>
-                        <rect x="48" y="10" width="24" height="55" rx="2" fill="#4da6ff" opacity="0.15"/>
-                        <text x="52" y="42" fill="#4da6ff" font-size="8" font-weight="600">Жид</text>
-                        <text x="52" y="52" fill="#4da6ff" font-size="8" font-weight="600">кость</text>
-                        <line x1="45" y1="90" x2="35" y2="98" stroke="#8e8e93" stroke-width="1"/>
-                        <line x1="75" y1="90" x2="85" y2="98" stroke="#8e8e93" stroke-width="1"/>
-                        <text x="33" y="103" fill="#8e8e93" font-size="6">Забой</text>
-                        <text x="82" y="103" fill="#8e8e93" font-size="6">P</text>
+                    <svg viewBox="0 0 100 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="38" y="4" width="24" height="72" rx="4" stroke="#4da6ff" stroke-width="2" fill="none"/>
+                        <rect x="40" y="20" width="20" height="50" rx="2" fill="#4da6ff" opacity="0.12"/>
+                        <text x="50" y="50" fill="#4da6ff" font-size="8" font-weight="600" text-anchor="middle">P</text>
+                        <text x="50" y="85" fill="#8e8e93" font-size="7" text-anchor="middle">Забой</text>
                     </svg>
                 </div>
                 <div class="input-row">
@@ -442,13 +465,13 @@
             <div class="card">
                 <h3>ПРОКАЧКА</h3>
                 <div class="illustration">
-                    <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="25" y="5" width="70" height="85" rx="4" stroke="#4da6ff" stroke-width="2" fill="none"/>
-                        <circle cx="60" cy="65" r="8" fill="#4da6ff" opacity="0.3"/>
-                        <circle cx="60" cy="65" r="4" fill="#4da6ff"/>
-                        <path d="M60 15 L55 25 L65 25 Z" fill="#4da6ff" opacity="0.6"/>
-                        <text x="40" y="48" fill="#4da6ff" font-size="7">→ поток</text>
-                        <text x="35" y="95" fill="#8e8e93" font-size="7">Пробка на забое</text>
+                    <svg viewBox="0 0 100 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="20" y="4" width="60" height="72" rx="4" stroke="#4da6ff" stroke-width="2" fill="none"/>
+                        <circle cx="50" cy="60" r="6" fill="#4da6ff" opacity="0.3"/>
+                        <circle cx="50" cy="60" r="3" fill="#4da6ff"/>
+                        <path d="M50 10 L45 18 L55 18 Z" fill="#4da6ff" opacity="0.6"/>
+                        <text x="50" y="36" fill="#4da6ff" font-size="7" text-anchor="middle">→</text>
+                        <text x="50" y="85" fill="#8e8e93" font-size="7" text-anchor="middle">Пробка</text>
                     </svg>
                 </div>
                 <div class="mode-switch">
@@ -496,12 +519,10 @@
     <script>
         let currentMode = 0;
 
-        // Splash screen
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('splash').classList.add('hide');
-                document.body.classList.add('loaded');
-            }, 2000);
+            }, 2200);
         });
 
         function switchTab(n) {
